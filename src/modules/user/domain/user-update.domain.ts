@@ -1,4 +1,3 @@
-import { UserUpdateCommand } from '../commands/impl/user-update.command';
 import { UserEntity } from '../entities/user.entity';
 
 export class UserUpdate {
@@ -30,13 +29,5 @@ export class UserUpdate {
     if (userUpdate.email !== undefined) entity.email = userUpdate.email;
 
     return entity;
-  }
-
-  static fromCommand(command: UserUpdateCommand): UserUpdate {
-    return new UserUpdate({
-      firstName: command.firstName,
-      lastName: command.lastName,
-      email: command.email,
-    });
   }
 }

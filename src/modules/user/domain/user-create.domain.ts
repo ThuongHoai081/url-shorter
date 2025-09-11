@@ -1,4 +1,3 @@
-import { UserCreateCommand } from '../commands/impl/user-create.command';
 import { UserEntity } from '../entities/user.entity';
 
 export class UserCreate {
@@ -20,13 +19,5 @@ export class UserCreate {
       lastName: userCreate.lastName,
       email: userCreate.email,
     };
-  }
-
-  static fromCommand(command: UserCreateCommand) {
-    return new UserCreate({
-      firstName: command.firstName,
-      lastName: command.lastName,
-      email: command.email,
-    });
   }
 }

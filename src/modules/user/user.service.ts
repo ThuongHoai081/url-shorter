@@ -19,9 +19,11 @@ export class UserService {
 
   async create(userCreate: UserCreate): Promise<User> {
     await this.verifyEmailIsNotExisting(userCreate.email);
+
     const userEntity = this.userRepository.create(
       UserCreate.toEntity(userCreate),
     );
+
     const saveUser = await this.userRepository.save(userEntity);
 
     return User.fromEntity(saveUser);
