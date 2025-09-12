@@ -35,14 +35,11 @@ export class UrlCreateDto {
   @IsNumber()
   readonly userId?: number;
 
-
   static toUrlCreate(dto: UrlCreateDto): UrlCreate {
     return {
       originalUrl: dto.originalUrl,
       shortCode: dto.shortCode ?? '',
       userId: dto.userId ?? 0,
-      domainId: dto.domainId ?? 0,
-      visitCount: dto.visitCount ?? 0,
     };
   }
 }
