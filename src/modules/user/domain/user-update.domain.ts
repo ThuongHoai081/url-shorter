@@ -7,27 +7,11 @@ export class UserUpdate {
 
   readonly email?: string;
 
-  constructor(props: {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-  }) {
-    this.firstName = props.firstName;
-    this.lastName = props.lastName;
-    this.email = props.email;
-  }
-
   static toEntity(userUpdate: UserUpdate): Partial<UserEntity> {
-    const entity: Partial<UserEntity> = { updatedAt: new Date() };
-
-    if (userUpdate.firstName !== undefined)
-      entity.firstName = userUpdate.firstName;
-
-    if (userUpdate.lastName !== undefined)
-      entity.lastName = userUpdate.lastName;
-
-    if (userUpdate.email !== undefined) entity.email = userUpdate.email;
-
-    return entity;
+    return {
+      firstName: userUpdate.firstName,
+      lastName: userUpdate.lastName,
+      email: userUpdate.email,
+    };
   }
 }
