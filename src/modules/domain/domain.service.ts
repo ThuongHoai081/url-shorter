@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DomainEntity } from './entities/domain.entity';
+import { extractDomain } from 'src/utils/url.utils';
 
 @Injectable()
 export class DomainService {
@@ -11,7 +12,7 @@ export class DomainService {
   ) {}
 
   async createOrGetDomainId(originalUrl: string): Promise<number> {
-    const domainName = this.extractDomain(originalUrl);
+    const domainName = extractDomain(originalUrl);
 
     let domainEntity = await this.domainRepository.findOneBy({
       name: domainName,
@@ -25,11 +26,5 @@ export class DomainService {
     const domainId = domainEntity.id;
 
     return domainId;
-  }
-
-  private extractDomain(originalUrl: string): string {
-    const url = new URL(originalUrl);
-
-    return url.hostname;
   }
 }
