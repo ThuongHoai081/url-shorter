@@ -35,7 +35,7 @@ export class UserService {
     return User.fromEntities(userEntities);
   }
 
-  async findByID(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     const userEntity = await this.findUserOrThrow(id);
 
     return User.fromEntity(userEntity);
