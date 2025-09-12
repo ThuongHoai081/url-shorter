@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Res,
 } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { UrlDto } from './dto/url.dto';
