@@ -36,7 +36,7 @@ export class UserController {
   @Patch(':id')
   async update(
     @Param('id') id: number,
-    @Body() updateUserDto: UserUpdateDto,
+    @Body() userUpdateDto: UserUpdateDto,
   ): Promise<UserDto> {
     return UserDto.fromDomain(
       await this.userService.update(
