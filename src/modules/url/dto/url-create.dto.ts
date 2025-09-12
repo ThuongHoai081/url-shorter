@@ -35,24 +35,6 @@ export class UrlCreateDto {
   @IsNumber()
   readonly userId?: number;
 
-  @ApiProperty({
-    example: 1,
-    description:
-      'Optional domain ID (will be set automatically if not provided)',
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber()
-  readonly domainId?: number;
-
-  @ApiProperty({
-    example: 0,
-    description: 'Optional visit count; defaults to 0',
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber()
-  readonly visitCount?: number;
 
   static toUrlCreate(dto: UrlCreateDto): UrlCreate {
     return {
