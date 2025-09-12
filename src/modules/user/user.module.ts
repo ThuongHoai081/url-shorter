@@ -11,10 +11,6 @@ import { CqrsModule } from '@nestjs/cqrs';
   controllers: [UserController],
   providers: [
     UserService,
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    },
   ],
 })
 export class UserModule {}
