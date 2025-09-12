@@ -17,18 +17,33 @@ export default tseslint.config(
         ...globals.node,
         ...globals.jest,
       },
+      parser: tseslint.parser,
       sourceType: 'commonjs',
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
   {
     rules: {
+      '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      'prettier/prettier': [
+        'warn',
+        {
+          trailingComma: 'all',
+          useTabs: false,
+          tabWidth: 2,
+          semi: true,
+          singleQuote: true,
+          bracketSpacing: true,
+          arrowParens: 'always',
+          endOfLine: 'auto',
+        },
+      ],
     },
   },
 );
