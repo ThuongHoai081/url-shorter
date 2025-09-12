@@ -1,9 +1,11 @@
+import { UrlEntity } from 'src/modules/url/entities/url.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -25,4 +27,7 @@ export class UserEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => UrlEntity, (url) => url.user)
+  urls: UrlEntity[];
 }
