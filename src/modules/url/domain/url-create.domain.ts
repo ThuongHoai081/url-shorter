@@ -13,8 +13,6 @@ export class UrlCreate {
       originalUrl: urlCreate.originalUrl,
       shortCode: urlCreate.shortCode,
       userId: urlCreate.userId ?? null,
-      domainId: urlCreate.domainId,
-      visitCount: urlCreate.visitCount ?? 0,
     };
   }
 }
