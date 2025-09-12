@@ -1,5 +1,4 @@
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-//import { faker } from '@faker-js/faker';
 
 export const userFactory = async (): Promise<Partial<UserEntity>> => {
   const { faker } = await import('@faker-js/faker');
