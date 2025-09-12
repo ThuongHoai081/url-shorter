@@ -16,8 +16,6 @@ export class UrlService {
   ) {}
 
   async create(urlCreate: UrlCreate): Promise<Url> {
-    await this.verifyUrlIsNotExisting(urlCreate.originalUrl);
-
     const domainId = await this.domainService.createOrGetDomainId(
       urlCreate.originalUrl,
     );
@@ -32,14 +30,6 @@ export class UrlService {
 
     const saved = await this.urlRepository.save(urlEntity);
     return Url.fromEntity(saved);
-  }
-
-  private async verifyUrlIsNotExisting(originalUrl: string): Promise<void> {
-    const exists = await this.urlRepository.findOneBy({ originalUrl });
-
-    if (exists) {
-      throw new BadRequestException('originalUrl already exists');
-    }
   }
 
   private generateShortCode(length = 6): string {

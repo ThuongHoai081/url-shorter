@@ -21,7 +21,7 @@ export class UrlEntity {
   @Column({ nullable: false, type: 'varchar' })
   shortCode: string;
 
-  @Column({ type: 'number', nullable: true })
+  @Column({ type: 'int', nullable: true })
   userId: number | null;
 
   @ManyToOne(() => UserEntity, (user) => user.urls, {
@@ -31,7 +31,7 @@ export class UrlEntity {
   @JoinColumn({ name: 'userId' })
   user?: UserEntity | null;
 
-  @Column({ type: 'number', nullable: false })
+  @Column({ type: 'int', nullable: false })
   domainId: number;
 
   @ManyToOne(() => DomainEntity, (domain) => domain.urls, {
