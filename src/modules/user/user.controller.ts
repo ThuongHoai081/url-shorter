@@ -30,7 +30,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<UserDto> {
-    return UserDto.fromDomain(await this.userService.findByID(id));
+    return UserDto.fromDomain(await this.userService.findById(id));
   }
 
   @Patch(':id')
@@ -41,7 +41,7 @@ export class UserController {
     return UserDto.fromDomain(
       await this.userService.update(
         id,
-        UserUpdateDto.toUserUpdate(updateUserDto),
+        UserUpdateDto.toUserUpdate(userUpdateDto),
       ),
     );
   }
