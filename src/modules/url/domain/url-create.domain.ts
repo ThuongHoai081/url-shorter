@@ -7,7 +7,6 @@ export class UrlCreate {
 
   readonly userId?: number;
 
-
   static toEntity(urlCreate: UrlCreate): Partial<UrlEntity> {
     return {
       originalUrl: urlCreate.originalUrl,
