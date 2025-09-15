@@ -36,8 +36,9 @@ export class UrlService {
   }
 
   async findAll(): Promise<Url[]> {
-    const urlEntities = await this.urlRepository.find();
-    return Url.fromEntities(urlEntities);
+    return Url.fromEntities(
+      await this.urlRepository.find()
+    );
   }
 
   async findById(id: number): Promise<Url> {
