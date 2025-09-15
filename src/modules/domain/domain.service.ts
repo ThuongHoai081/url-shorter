@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DomainEntity } from './entities/domain.entity';
 import { extractDomain } from 'src/utils/url.utils';
+import { Domain } from './domain/domain';
 
 @Injectable()
 export class DomainService {
@@ -21,13 +22,13 @@ export class DomainService {
     if (domainEntity) {
       return Domain.fromEntity(domainEntity);
     }
-    
+
     return Domain.fromEntity(
       await this.domainRepository.save(
-       this.domainRepository.create({
-           domain: domainName
-        })
-      );
+        this.domainRepository.create({
+          name: domainName,
+        }),
+      ),
+    );
   }
-  
 }

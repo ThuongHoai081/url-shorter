@@ -9,6 +9,11 @@ async function bootstrap() {
   app.setGlobalPrefix(process.env.API_PREFIX ?? 'api/v1');
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   const config = new DocumentBuilder()
     .setTitle('URL Shortener API')

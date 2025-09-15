@@ -4,13 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Res,
 } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { UrlDto } from './dto/url.dto';
-import { UrlUpdateDto } from './dto/url-update.dto';
 import { UrlCreateDto } from './dto/url-create.dto';
+import type { Response } from 'express';
 
 @Controller('url')
 export class UrlController {
@@ -28,11 +28,17 @@ export class UrlController {
     return UrlDto.fromDomains(await this.urlService.findAll());
   }
 
-  @Get(':id')
+  @Get('id/:id')
   async findOne(@Param('id') id: number): Promise<UrlDto> {
     return UrlDto.fromDomain(await this.urlService.findById(id));
   }
 
+  @Get(':code')
+  async resolveUrl(@Param('code') code: string, @Res() res: Response) {
+    const urlEntity = await this.urlService.findByShortCode(code);
+
+    return res.redirect(301, urlEntity.originalUrl);
+  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

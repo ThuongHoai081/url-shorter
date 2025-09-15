@@ -4,8 +4,8 @@ import { UrlEntity } from './entities/url.entity';
 import { Repository } from 'typeorm';
 import { Url } from './domain/url.domain';
 import { DomainService } from '../domain/domain.service';
-import { UrlUpdate } from './domain/url-update.domain';
 import { UrlCreate } from './domain/url-create.domain';
+import { generateShortCode } from 'src/utils/url.utils';
 
 @Injectable()
 export class UrlService {
@@ -16,31 +16,21 @@ export class UrlService {
     private readonly domainService: DomainService,
   ) {}
 
-   async create(urlCreate: UrlCreate): Promise<Url> {
-    const domainId = await this.domainService.createOrGetDomainId(
+  async create(urlCreate: UrlCreate): Promise<Url> {
+    const domainId = await this.domainService.findOrCreate(
       urlCreate.originalUrl,
     );
 
-    const shortCode = urlCreate.shortCode ?? this.generateShortCode();
+    const shortCode = urlCreate.shortCode ?? generateShortCode();
 
     const urlEntity = this.urlRepository.create({
       ...UrlCreate.toEntity(urlCreate),
       shortCode,
-      domainId,
+      domain: domainId,
     });
 
     const saved = await this.urlRepository.save(urlEntity);
     return Url.fromEntity(saved);
-  }
-
-  private generateShortCode(length = 6): string {
-    const chars =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = '';
-    for (let i = 0; i < length; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return code;
   }
 
   async findAll(): Promise<Url[]> {
@@ -64,33 +54,34 @@ export class UrlService {
     return urlEntity;
   }
 
-  async update(id: number, urlUpdate: UrlUpdate): Promise<Url> {
-    const urlEntity = await this.findUrlOrThrow(id);
-
-    return Url.fromEntity(
-      await this.urlRepository.save({
-        ...urlEntity,
-        ...UrlUpdate.toEntity(urlUpdate),
-      }),
-    );
-  }
-
   async remove(id: number): Promise<void> {
     const urlEntity = await this.findUrlOrThrow(id);
 
     await this.urlRepository.remove(urlEntity);
   }
 
-  async incrementVisitCount(url: UrlEntity): Promise<void> {
-    const url = await this.urlRepository.findOneBy({ shortCode });
+  async findByShortCode(shortCode: string): Promise<Url> {
+    const urlEntity = await this.findShortCodeOrThrow(shortCode);
 
-    if (!url) {
-      throw new NotFoundException('URL not found');
+    const urlUpdate = await this.incrementVisitCount(urlEntity);
+
+    return Url.fromEntity(urlUpdate);
+  }
+
+  private async findShortCodeOrThrow(shortCode: string): Promise<UrlEntity> {
+    const urlEntity = await this.urlRepository.findOneBy({ shortCode });
+
+    if (!urlEntity) {
+      throw new NotFoundException(`User with shortCode ${shortCode} not found`);
     }
 
-    await this.urlRepository.save({
-       ...url,
-       visitCount: url.visitCount + 1
+    return urlEntity;
+  }
+
+  async incrementVisitCount(url: UrlEntity): Promise<UrlEntity> {
+    return await this.urlRepository.save({
+      ...url,
+      visitCount: url.visitCount + 1,
     });
   }
 }
