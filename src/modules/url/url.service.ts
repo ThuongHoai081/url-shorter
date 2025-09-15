@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UrlEntity } from './entities/url.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { Url } from './domain/url.domain';
 import { DomainService } from '../domain/domain.service';
 import { UrlCreate } from './domain/url-create.domain';
-import { generateShortCode } from 'src/utils/url.utils';
+import { generateCode } from 'src/utils/url.utils';
 
 @Injectable()
 export class UrlService {
@@ -21,7 +21,7 @@ export class UrlService {
       urlCreate.originalUrl,
     );
 
-    const shortCode = urlCreate.shortCode?.trim() || generateShortCode();
+    const shortCode = urlCreate.shortCode?.trim() || generateCode();
 
     const urlEntity = this.urlRepository.create({
       ...UrlCreate.toEntity(urlCreate),
@@ -29,53 +29,39 @@ export class UrlService {
       domain: domainId,
     });
 
-    console.log(urlEntity);
+    Logger.log(urlEntity);
 
     const saved = await this.urlRepository.save(urlEntity);
     return Url.fromEntity(saved);
   }
 
   async findAll(): Promise<Url[]> {
-    return Url.fromEntities(
-      await this.urlRepository.find()
-    );
+    return Url.fromEntities(await this.urlRepository.find());
   }
 
   async findById(id: number): Promise<Url> {
-    return Url.fromEntity(
-      await this.findUrlOrThrow(id)
-    );
-  }
-
-  private async findUrlOrThrow(id: number): Promise<UrlEntity> {
-    const urlEntity = await this.urlRepository.findOneBy({ id });
-
-    if (!urlEntity) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-
-    return urlEntity;
+    return Url.fromEntity(await this.findUrlOrThrow({ id }));
   }
 
   async remove(id: number): Promise<void> {
-    await this.urlRepository.remove(
-      await this.findUrlOrThrow(id)
-    );
+    await this.urlRepository.remove(await this.findUrlOrThrow({ id }));
   }
 
   async findByShortCode(shortCode: string): Promise<Url> {
-    const urlEntity = await this.findShortCodeOrThrow(shortCode);
+    const urlEntity = await this.findUrlOrThrow({ shortCode });
 
     const urlUpdate = await this.incrementVisitCount(urlEntity);
 
     return Url.fromEntity(urlUpdate);
   }
 
-  private async findShortCodeOrThrow(shortCode: string): Promise<UrlEntity> {
-    const urlEntity = await this.urlRepository.findOneBy({ shortCode });
+  private async findUrlOrThrow(
+    criterial: FindOptionsWhere<UrlEntity>,
+  ): Promise<UrlEntity> {
+    const urlEntity = await this.urlRepository.findOneBy(criterial);
 
     if (!urlEntity) {
-      throw new NotFoundException(`User with shortCode ${shortCode} not found`);
+      throw new NotFoundException(`Unable to find url`);
     }
 
     return urlEntity;

@@ -37,7 +37,7 @@ export class UrlController {
   async resolveUrl(@Param('code') code: string, @Res() res: Response) {
     const url = await this.urlService.findByShortCode(code);
 
-    return res.redirect(301, urlEntity.originalUrl);
+    return res.redirect(301, url.originalUrl);
   }
 
   @Delete(':id')

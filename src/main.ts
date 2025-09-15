@@ -10,12 +10,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  app.enableCors({
-    origin: '*',
-    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
-
   const config = new DocumentBuilder()
     .setTitle('URL Shortener API')
     .setDescription('API documentation for URL Shortener project')
