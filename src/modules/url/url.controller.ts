@@ -12,7 +12,7 @@ import { UrlDto } from './dto/url.dto';
 import { UrlCreateDto } from './dto/url-create.dto';
 import type { Response } from 'express';
 
-@Controller('url')
+@Controller('urls')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
