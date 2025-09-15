@@ -80,7 +80,7 @@ export class UrlService {
     return urlEntity;
   }
 
-  async incrementVisitCount(url: UrlEntity): Promise<UrlEntity> {
+  private async incrementVisitCount(url: UrlEntity): Promise<UrlEntity> {
     return await this.urlRepository.save({
       ...url,
       visitCount: url.visitCount + 1,
