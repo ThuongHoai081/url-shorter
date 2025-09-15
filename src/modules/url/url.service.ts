@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UrlEntity } from './entities/url.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
@@ -16,19 +16,26 @@ export class UrlService {
   ) {}
 
   async create(urlCreate: UrlCreate): Promise<Url> {
-    const domainId = await this.domainService.findOrCreate(
-      urlCreate.originalUrl,
-    );
+    const urlExists = await this.urlRepository.findOne({
+      where: {
+        originalUrl: urlCreate.originalUrl,
+        userId: urlCreate.userId,
+      },
+    });
 
-    const shortCode = urlCreate.shortCode?.trim() || generateCode();
+    if (urlExists) {
+      return Url.fromEntity(urlExists);
+    }
+
+    const domain = await this.domainService.findOrCreate(urlCreate.originalUrl);
+
+    const shortCode = await this.generateNewCode(urlCreate.shortCode?.trim());
 
     const urlEntity = this.urlRepository.create({
       ...UrlCreate.toEntity(urlCreate),
       shortCode: shortCode,
-      domain: domainId,
+      domain: domain,
     });
-
-    Logger.log(urlEntity);
 
     const saved = await this.urlRepository.save(urlEntity);
     return Url.fromEntity(saved);
@@ -71,5 +78,15 @@ export class UrlService {
       ...url,
       visitCount: url.visitCount + 1,
     });
+  }
+
+  private async generateNewCode(presetCode?: string | null): Promise<string> {
+    let code = presetCode?.trim() || generateCode();
+
+    while (await this.urlRepository.existsBy({ shortCode: code })) {
+      code = generateCode();
+    }
+
+    return code;
   }
 }
