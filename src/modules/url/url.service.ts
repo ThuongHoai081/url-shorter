@@ -16,17 +16,6 @@ export class UrlService {
   ) {}
 
   async create(urlCreate: UrlCreate): Promise<Url> {
-    const urlExists = await this.urlRepository.findOne({
-      where: {
-        originalUrl: urlCreate.originalUrl,
-        userId: urlCreate.userId,
-      },
-    });
-
-    if (urlExists) {
-      return Url.fromEntity(urlExists);
-    }
-
     const domain = await this.domainService.findOrCreate(urlCreate.originalUrl);
 
     const shortCode = await this.generateNewCode(urlCreate.shortCode?.trim());
