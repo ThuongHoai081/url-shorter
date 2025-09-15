@@ -12,7 +12,6 @@ export class UrlService {
   constructor(
     @InjectRepository(UrlEntity)
     private readonly urlRepository: Repository<UrlEntity>,
-
     private readonly domainService: DomainService,
   ) {}
 
