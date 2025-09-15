@@ -21,13 +21,15 @@ export class UrlService {
       urlCreate.originalUrl,
     );
 
-    const shortCode = urlCreate.shortCode ?? generateShortCode();
+    const shortCode = urlCreate.shortCode?.trim() || generateShortCode();
 
     const urlEntity = this.urlRepository.create({
       ...UrlCreate.toEntity(urlCreate),
-      shortCode,
+      shortCode: shortCode,
       domain: domainId,
     });
+
+    console.log(urlEntity);
 
     const saved = await this.urlRepository.save(urlEntity);
     return Url.fromEntity(saved);
