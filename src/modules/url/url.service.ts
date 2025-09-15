@@ -81,7 +81,7 @@ export class UrlService {
     await this.urlRepository.remove(urlEntity);
   }
 
-  async incrementVisitCount(shortCode: string): Promise<void> {
+  async incrementVisitCount(url: UrlEntity): Promise<void> {
     const url = await this.urlRepository.findOneBy({ shortCode });
 
     if (!url) {
