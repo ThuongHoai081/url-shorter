@@ -42,9 +42,9 @@ export class UrlService {
   }
 
   async findById(id: number): Promise<Url> {
-    const urlEntity = await this.findUrlOrThrow(id);
-
-    return Url.fromEntity(urlEntity);
+    return Url.fromEntity(
+      await this.findUrlOrThrow(id)
+    );
   }
 
   private async findUrlOrThrow(id: number): Promise<UrlEntity> {
