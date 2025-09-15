@@ -58,9 +58,9 @@ export class UrlService {
   }
 
   async remove(id: number): Promise<void> {
-    const urlEntity = await this.findUrlOrThrow(id);
-
-    await this.urlRepository.remove(urlEntity);
+    await this.urlRepository.remove(
+      await this.findUrlOrThrow(id)
+    );
   }
 
   async findByShortCode(shortCode: string): Promise<Url> {
