@@ -11,7 +11,7 @@ export class DomainService {
     private readonly domainRepository: Repository<DomainEntity>,
   ) {}
 
-  async createOrGetDomainId(originalUrl: string): Promise<number> {
+  async findOrCreate(originalUrl: string): Promise<Domain> {
     const domainName = extractDomain(originalUrl);
 
     let domainEntity = await this.domainRepository.findOneBy({
