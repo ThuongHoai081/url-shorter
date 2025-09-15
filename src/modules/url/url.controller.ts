@@ -35,7 +35,7 @@ export class UrlController {
 
   @Get(':code')
   async resolveUrl(@Param('code') code: string, @Res() res: Response) {
-    const urlEntity = await this.urlService.findByShortCode(code);
+    const url = await this.urlService.findByShortCode(code);
 
     return res.redirect(301, urlEntity.originalUrl);
   }
