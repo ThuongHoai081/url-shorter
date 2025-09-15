@@ -14,17 +14,20 @@ export class DomainService {
   async findOrCreate(originalUrl: string): Promise<Domain> {
     const domainName = extractDomain(originalUrl);
 
-    let domainEntity = await this.domainRepository.findOneBy({
+    const domainEntity = await this.domainRepository.findOneBy({
       name: domainName,
     });
 
-    if (!domainEntity) {
-      domainEntity = this.domainRepository.create({ name: domainName });
-      domainEntity = await this.domainRepository.save(domainEntity);
+    if (domainEntity) {
+      return Domain.fromEntity(domainEntity);
     }
-
-    const domainId = domainEntity.id;
-
-    return domainId;
+    
+    return Domain.fromEntity(
+      await this.domainRepository.save(
+       this.domainRepository.create({
+           domain: domainName
+        })
+      );
   }
+  
 }
