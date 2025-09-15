@@ -87,7 +87,9 @@ export class UrlService {
       throw new NotFoundException('URL not found');
     }
 
-    url.visitCount += 1;
-    await this.urlRepository.save(url);
+    await this.urlRepository.save({
+       ...url,
+       visitCount: url.visitCount + 1
+    });
   }
 }
