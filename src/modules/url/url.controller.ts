@@ -33,15 +33,6 @@ export class UrlController {
     return UrlDto.fromDomain(await this.urlService.findById(id));
   }
 
-  @Patch(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() urlUpdateDto: UrlUpdateDto,
-  ): Promise<UrlDto> {
-    return UrlDto.fromDomain(
-      await this.urlService.update(id, UrlUpdateDto.toUrlUpdate(urlUpdateDto)),
-    );
-  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
