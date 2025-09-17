@@ -48,10 +48,9 @@ export class DomainService {
     return Domain.fromEntities(domains);
   }
 
-  private baseTopDomainQuery(limit = 100) {
+  private baseTopDomainQuery(limit: number | undefined) {
     return this.domainRepository
       .createQueryBuilder('domain')
-      .select(['domain.id AS id', 'domain.name AS name'])
       .leftJoin('domain.urls', 'url')
       .groupBy('domain.id')
       .limit(limit);
