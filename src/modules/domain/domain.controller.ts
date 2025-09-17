@@ -6,7 +6,7 @@ import { DomainDto } from './dto/domain.dto';
 export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
-  @Get('top-domain')
+  @Get('top-shorter')
   async getTopDomain(): Promise<DomainDto[]> {
     return DomainDto.fromDomains(await this.domainService.getTopDomain(100));
   }
