@@ -11,7 +11,7 @@ export class DomainController {
     return DomainDto.fromDomains(await this.domainService.getTopDomain(100));
   }
 
-  @Get('top-visited-domain')
+  @Get('top-visited')
   async getTopVisitedDomain(): Promise<DomainDto[]> {
     return DomainDto.fromDomains(
       await this.domainService.getTopVisitedDomain(100),
