@@ -31,4 +31,28 @@ export class DomainService {
       ),
     );
   }
+
+  async getTopDomain(limit = 100): Promise<Domain[]> {
+    const domains = await this.baseTopDomainQuery(limit)
+      .orderBy('COUNT(url.id)', 'DESC')
+      .getMany();
+
+    return Domain.fromEntities(domains);
+  }
+
+  async getTopVisitedDomain(limit = 100): Promise<Domain[]> {
+    const domains = await this.baseTopDomainQuery(limit)
+      .orderBy('COALESCE(SUM(url.visitCount), 0) ', 'DESC')
+      .getMany();
+
+    return Domain.fromEntities(domains);
+  }
+
+  private baseTopDomainQuery(limit: number | undefined) {
+    return this.domainRepository
+      .createQueryBuilder('domain')
+      .leftJoin('domain.urls', 'url')
+      .groupBy('domain.id')
+      .limit(limit);
+  }
 }
