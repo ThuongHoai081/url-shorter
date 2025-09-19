@@ -1,33 +1,52 @@
-version: '3.8'
-
-services: 
-  db:
-    container_name: postgres-db
-    image: postgres:16-alpine3.18
+services:
+  database:
+    build: postgres
     restart: always
+    container_name: database
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_MULTIPLE_DATABASES: $DB_DATABASE, keycloak
+      TZ: "GMT"
+      PGTZ: "GMT"
     ports:
-      - '${POSTGRES_PORT}:5432'
-    volumes:
-      - postgres:/var/lib/postgresql/data
-      - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
-    env_file:
-      - .env
+      - "$DB_PORT:$DB_PORT"
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    ports:
-      - "8080:80"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://database/keycloak
+      KC_DB_USERNAME: $DB_USERNAME
+      KC_DB_PASSWORD: $DB_PASSWORD
+      KEYCLOAK_ADMIN: $KEYCLOAK_ADMIN
+      KEYCLOAK_ADMIN_PASSWORD: $KEYCLOAK_ADMIN_PASSWORD
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled
+      KEYCLOAK_EXTRA_ARGS: --import-realm
+      KC_LOG_LEVEL: debug
+      KC_LOG_CONSOLE_COLOR: "true"
+      KC_LOG_CONSOLE_OUTPUT: "default"
+      KC_LOG_LEVEL_EVENTS: debug
+      KC_LOG_LEVEL_ADMIN_EVENTS: debug
+      KC_LOG_LEVEL_TRANSACTIONS: debug
+      KC_LOG_LEVEL_SERVICES: debug
+      KC_HOSTNAME_STRICT: 'false'
+      KC_PROXY: edge
     volumes:
-      - /data/pgadmin:/root/.pgadmin
-    env_file:
-      - .env
-    links:
-      - db
-volumes:
-  postgres:
-    driver: local
+      - ./keycloak/data:/opt/keycloak/data
+      - ./keycloak/import:/opt/keycloak/data/import
+    ports:
+      - "$KEYCLOAK_PORT:8080"
+    depends_on:
+      - database
+    command:
+      [
+        "start-dev",
+        "--import-realm",
+        "--features=preview",
+        "--spi-scripts-default-provider=default",
+        "--spi-scripts-default-enabled=true",
+        "--spi-authorization-policy-provider-js-enabled=true"
+      ]
