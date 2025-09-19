@@ -28,6 +28,11 @@ export class UserController {
     return UserDto.fromDomains(await this.userService.findAll());
   }
 
+  @Get('top-shorter')
+  async getTopShorter(): Promise<UserDto[]> {
+    return UserDto.fromDomains(await this.userService.getTopShorter(10));
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<UserDto> {
     return UserDto.fromDomain(await this.userService.findById(id));

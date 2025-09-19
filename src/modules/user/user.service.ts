@@ -75,4 +75,20 @@ export class UserService {
 
     return userEntity;
   }
+
+  async getTopShorter(limit: number): Promise<User[]> {
+    const { entities } = await this.baseTopUserQuery(limit)
+      .orderBy('COUNT(url.id)', 'DESC')
+      .getRawAndEntities();
+
+    return User.fromEntities(entities);
+  }
+
+  private baseTopUserQuery(limit: number | undefined) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.urls', 'url')
+      .groupBy('user.id')
+      .limit(limit);
+  }
 }
