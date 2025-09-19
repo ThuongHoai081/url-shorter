@@ -76,7 +76,7 @@ export class UserService {
     return userEntity;
   }
 
-  async getTopUser(limit: number): Promise<User[]> {
+  async getTopShorter(limit: number): Promise<User[]> {
     const { entities } = await this.baseTopUserQuery(limit)
       .orderBy('COUNT(url.id)', 'DESC')
       .getRawAndEntities();

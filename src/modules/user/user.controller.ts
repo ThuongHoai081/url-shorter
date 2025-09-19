@@ -29,8 +29,8 @@ export class UserController {
   }
 
   @Get('top-shorter')
-  async getTopUser(): Promise<UserDto[]> {
-    return UserDto.fromDomains(await this.userService.getTopUser(10));
+  async getTopShorter(): Promise<UserDto[]> {
+    return UserDto.fromDomains(await this.userService.getTopShorter(10));
   }
 
   @Get(':id')
