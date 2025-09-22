@@ -1,7 +1,7 @@
 import { UrlEntity } from 'src/modules/url/entities/url.entity';
 import { DataSource } from 'typeorm';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { DomainEntity } from 'dist/modules/domain/entities/domain.entity';
+import { DomainEntity } from '../../modules/domain/entities/domain.entity';
 
 export const urlFactory = async (
   dataSource: DataSource,

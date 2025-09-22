@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DomainEntity } from './entities/domain.entity';
-import { extractDomain } from 'dist/utils/url.utils';
+import { extractDomain } from '../../utils/url.utils';
 import { Domain } from './domain/domain';
 
 @Injectable()
