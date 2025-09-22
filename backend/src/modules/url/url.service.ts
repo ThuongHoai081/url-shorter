@@ -5,7 +5,7 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { Url } from './domain/url.domain';
 import { DomainService } from '../domain/domain.service';
 import { UrlCreate } from './domain/url-create.domain';
-import { generateCode } from '../../utils/url.utils';
+import { generateCode } from 'src/utils/url.utils';
 
 @Injectable()
 export class UrlService {
