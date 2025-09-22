@@ -21,4 +21,4 @@ COPY backend /usr/src/app
 
 EXPOSE $PORT
 
-ENTRYPOINT [ "npm", "run", "start" ]
+CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start:prod"]

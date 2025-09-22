@@ -1,8 +1,10 @@
 import { readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, basename } from 'path';
 
-const factoriesDir = join(__dirname);
-const seedsDir = join(__dirname, '../seeds');
+// const factoriesDir = join(__dirname);
+// const seedsDir = join(__dirname, '../seeds');
+const factoriesDir = join(process.cwd(), 'src/database/factories');
+const seedsDir = join(process.cwd(), 'src/database/seeds');
 
 if (!existsSync(seedsDir)) {
   try {
