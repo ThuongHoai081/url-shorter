@@ -5,6 +5,7 @@ import { UserModule } from './modules/user/user.module';
 import { AppDataSource } from './database/data-source';
 import { UrlModule } from './modules/url/url.module';
 import { DomainModule } from './modules/domain/domain.module';
+import { KeycloakModule } from './modules/keycloak/keycloak.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DomainModule } from './modules/domain/domain.module';
     UserModule,
     UrlModule,
     DomainModule,
+    KeycloakModule,
   ],
 })
 export class AppModule {}
