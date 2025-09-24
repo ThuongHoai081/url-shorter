@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: $DB_USERNAME
       POSTGRES_PASSWORD: $DB_PASSWORD
-      POSTGRES_MULTIPLE_DATABASES: $DB_DATABASE, keycloak
+      POSTGRES_MULTIPLE_DATABASES: $DB_DATABASE,keycloak
       TZ: "GMT"
       PGTZ: "GMT"
     ports:
