@@ -21,4 +21,4 @@ COPY backend /usr/src/app
 
 EXPOSE $PORT
 
-CMD ["sh", "-c", "npm run migration:run && npm run seed:run && npm run start:prod"]
+CMD ["sh", "-c", "npm run migration:run && npm run start:prod"]
