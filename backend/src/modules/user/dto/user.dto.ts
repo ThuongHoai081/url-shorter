@@ -17,6 +17,15 @@ export class UserDto {
   })
   readonly email: string;
 
+  @ApiProperty({ example: 'johndoe', description: 'Username of the user' })
+  readonly username: string;
+
+  @ApiProperty({
+    example: 'strongpassword123',
+    description: 'Password of the user',
+  })
+  readonly password: string;
+
   @ApiPropertyOptional({
     example: '2025-09-10T12:00:00Z',
     description: 'Date when the user was created',
@@ -35,6 +44,8 @@ export class UserDto {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      username: user.username,
+      password: user.password,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

@@ -21,11 +21,29 @@ export class UserCreateDto {
   @IsEmail({}, { message: 'Email must be a valid email address' })
   readonly email: string;
 
+  @ApiProperty({
+    example: 'johndoe',
+    description: 'Username of the user',
+  })
+  @IsNotEmpty({ message: 'Username is required' })
+  @IsString({ message: 'Username must be a string' })
+  readonly username: string;
+
+  @ApiProperty({
+    example: 'strongpassword123',
+    description: 'Password of the user',
+  })
+  @IsNotEmpty({ message: 'Password is required' })
+  @IsString({ message: 'Password must be a string' })
+  readonly password: string;
+
   static toUserCreate(userCreateDto: UserCreateDto): UserCreate {
     return {
       firstName: userCreateDto.firstName,
       lastName: userCreateDto.lastName,
       email: userCreateDto.email,
+      username: userCreateDto.username,
+      password: userCreateDto.password,
     };
   }
 }
