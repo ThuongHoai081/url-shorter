@@ -9,10 +9,6 @@ export class User {
 
   readonly email: string;
 
-  readonly username: string;
-
-  readonly password: string;
-
   readonly createdAt: Date;
 
   readonly updatedAt: Date;
@@ -23,8 +19,6 @@ export class User {
       firstName: entity.firstName,
       lastName: entity.lastName,
       email: entity.email,
-      username: entity.username,
-      password: entity.password,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };
