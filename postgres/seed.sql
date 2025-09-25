@@ -2,18 +2,18 @@
 -- Seed users with username and hashed password
 -- Passwords are hashed; original password in comment
 -- ========================================
-INSERT INTO users (id, "firstName", "lastName", "email", "username", "password", "createdAt", "updatedAt")
+INSERT INTO users (id, "firstName", "lastName", "email", "createdAt", "updatedAt")
 VALUES
-    (1, 'Alice', 'Nguyen', 'alice@example.com', 'alice', '$2b$10$7f6qfE9tIYbW0hFzS4b1He7Nnq1Jf2E9YZ3tC5l8qfMvHZqGj1A6C', NOW(), NOW()), -- password: 123456
-    (2, 'Bob', 'Tran', 'bob@example.com', 'bob', '$2b$10$F3j1kB5lHq9vU2pTz1nWdeK1Hf4Xc7M6Qp9LrA8oKfR1v5NwT2y6m', NOW(), NOW()), -- password: 123456
-    (3, 'Charlie', 'Le', 'charlie@example.com', 'charlie', '$2b$10$Y2rT8mG7sUq9Lk3hJf1NeD5pVx2Qw7Z9Mn4HrS6tE1Gv5PbC3o8Zq', NOW(), NOW()), -- password: 123456
-    (4, 'David', 'Pham', 'david@example.com', 'david', '$2b$10$Q1wE2rT3yU4iO5pA6sD7fG8hJ9kL0zX1cV2bN3mO4pQ5rS6tU7vW', NOW(), NOW()), -- password: 123456
-    (5, 'Eva', 'Hoang', 'eva@example.com', 'eva', '$2b$10$L9mN8bV7cX6zA5sD4fG3hJ2kL1oP0qR9tS8uV7wX6yY5zZ4aB3cD', NOW(), NOW()), -- password: 123456
-    (6, 'Frank', 'Vu', 'frank@example.com', 'frank', '$2b$10$P4oL3kJ2hG1fD0sA9wE8rT7yU6iO5pA4sD3fG2hJ1kL0qR9tS8uV', NOW(), NOW()), -- password: 123456
-    (7, 'Grace', 'Do', 'grace@example.com', 'grace', '$2b$10$M1nO2pQ3rS4tU5vW6xY7zA8bC9dE0fG1hJ2kL3mN4oP5qR6sT7uV', NOW(), NOW()), -- password: 123456
-    (8, 'Henry', 'Ngo', 'henry@example.com', 'henry', '$2b$10$Z9yX8wV7uT6sR5qP4oN3mL2kJ1hG0fD9sA8rT7yU6iO5pA4sD3fG', NOW(), NOW()), -- password: 123456
-    (9, 'Isabel', 'Ly', 'isabel@example.com', 'isabel', '$2b$10$B2cD3eF4gH5iJ6kL7mN8oP9qR0sT1uV2wX3yZ4aB5cD6eF7gH8iJ', NOW(), NOW()), -- password: 123456
-    (10, 'Jack', 'Bui', 'jack@example.com', 'jack', '$2b$10$H1iJ2kL3mN4oP5qR6sT7uV8wX9yZ0aB1cD2eF3gH4iJ5kL6mN7oP', NOW(), NOW()) -- password: 123456
+    (1, 'Alice', 'Nguyen', 'alice@example.com', NOW(), NOW()), 
+    (2, 'Bob', 'Tran', 'bob@example.com', NOW(), NOW()), 
+    (3, 'Charlie', 'Le', 'charlie@example.com', NOW(), NOW()), 
+    (4, 'David', 'Pham', 'david@example.com', NOW(), NOW()), 
+    (5, 'Eva', 'Hoang', 'eva@example.com', NOW(), NOW()),
+    (6, 'Frank', 'Vu', 'frank@example.com', NOW(), NOW()), 
+    (7, 'Grace', 'Do', 'grace@example.com', NOW(), NOW()), 
+    (8, 'Henry', 'Ngo', 'henry@example.com', NOW(), NOW()),
+    (9, 'Isabel', 'Ly', 'isabel@example.com', NOW(), NOW()), 
+    (10, 'Jack', 'Bui', 'jack@example.com', NOW(), NOW()) 
 ON CONFLICT (id) DO NOTHING;
 alter table urls alter column "domainId" drop not null;
 
