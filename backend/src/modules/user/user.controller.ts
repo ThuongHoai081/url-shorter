@@ -1,27 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserCreateDto } from './dto/user-create.dto';
 import { UserUpdateDto } from './dto/user-update.dto';
 import { UserDto } from './dto/user.dto';
+import { UserEntity } from './entities/user.entity';
+import { AuthUser } from 'src/decorator/auth-user.decorator';
+import { RequireLoggedIn } from 'src/guards/role-container';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  async create(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
-    return UserDto.fromDomain(
-      await this.userService.create(UserCreateDto.toUserCreate(createUserDto)),
-    );
-  }
 
   @Get()
   async findAll(): Promise<UserDto[]> {
@@ -39,20 +27,24 @@ export class UserController {
   }
 
   @Patch(':id')
+  @RequireLoggedIn()
+  @ApiBearerAuth()
   async update(
-    @Param('id') id: number,
+    @AuthUser() user: UserEntity,
     @Body() userUpdateDto: UserUpdateDto,
   ): Promise<UserDto> {
     return UserDto.fromDomain(
       await this.userService.update(
-        id,
+        user,
         UserUpdateDto.toUserUpdate(userUpdateDto),
       ),
     );
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    await this.userService.remove(id);
+  @RequireLoggedIn()
+  @ApiBearerAuth()
+  async remove(@AuthUser() user: UserEntity): Promise<void> {
+    await this.userService.remove(user);
   }
 }

@@ -1,3 +1,4 @@
+import { RoleType } from 'src/guards/role-type';
 import { UrlEntity } from 'src/modules/url/entities/url.entity';
 import {
   Column,
@@ -12,6 +13,16 @@ import {
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ unique: true, nullable: true })
+  keyCloakId: string;
+
+  @Column({
+    type: 'enum',
+    enum: RoleType,
+    default: RoleType.USER,
+  })
+  role: RoleType;
 
   @Column({ nullable: true, type: 'varchar' })
   firstName: string;

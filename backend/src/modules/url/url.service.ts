@@ -6,6 +6,7 @@ import { Url } from './domain/url.domain';
 import { DomainService } from '../domain/domain.service';
 import { UrlCreate } from './domain/url-create.domain';
 import { generateCode } from 'src/utils/url.utils';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Injectable()
 export class UrlService {
@@ -15,7 +16,7 @@ export class UrlService {
     private readonly domainService: DomainService,
   ) {}
 
-  async create(urlCreate: UrlCreate): Promise<Url> {
+  async create(urlCreate: UrlCreate, user: UserEntity): Promise<Url> {
     const domain = await this.domainService.findOrCreate(urlCreate.originalUrl);
 
     const shortCode = await this.generateNewCode(urlCreate.shortCode?.trim());
@@ -24,6 +25,7 @@ export class UrlService {
       ...UrlCreate.toEntity(urlCreate),
       shortCode: shortCode,
       domain: domain,
+      userId: user.id,
     });
 
     const saved = await this.urlRepository.save(urlEntity);
@@ -34,16 +36,18 @@ export class UrlService {
     return Url.fromEntities(await this.urlRepository.find());
   }
 
-  async findById(id: number): Promise<Url> {
-    return Url.fromEntity(await this.findUrlOrThrow({ id }));
+  async findById(id: number, user: UserEntity): Promise<Url> {
+    return Url.fromEntity(await this.findUrlOrThrow({ id, userId: user.id }));
   }
 
-  async remove(id: number): Promise<void> {
-    await this.urlRepository.remove(await this.findUrlOrThrow({ id }));
+  async remove(id: number, user: UserEntity): Promise<void> {
+    await this.urlRepository.remove(
+      await this.findUrlOrThrow({ id, userId: user.id }),
+    );
   }
 
-  async findByShortCode(shortCode: string): Promise<Url> {
-    const urlEntity = await this.findUrlOrThrow({ shortCode });
+  async findByShortCode(shortCode: string, user: UserEntity): Promise<Url> {
+    const urlEntity = await this.findUrlOrThrow({ shortCode, userId: user.id });
 
     const urlUpdate = await this.incrementVisitCount(urlEntity);
 
