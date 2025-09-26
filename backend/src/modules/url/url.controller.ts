@@ -11,15 +11,27 @@ import { UrlService } from './url.service';
 import { UrlDto } from './dto/url.dto';
 import { UrlCreateDto } from './dto/url-create.dto';
 import type { Response } from 'express';
+import { RequireLoggedIn } from 'src/guards/role-container';
+import { UserEntity } from '../user/entities/user.entity';
+import { AuthUser } from 'src/decorator/auth-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
 
 @Controller('urls')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
   @Post()
-  async create(@Body() urlCreateDto: UrlCreateDto): Promise<UrlDto> {
+  @RequireLoggedIn()
+  @ApiBearerAuth()
+  async create(
+    @AuthUser() user: UserEntity,
+    @Body() urlCreateDto: UrlCreateDto,
+  ): Promise<UrlDto> {
     return UrlDto.fromDomain(
-      await this.urlService.create(UrlCreateDto.toUrlCreate(urlCreateDto)),
+      await this.urlService.create(
+        UrlCreateDto.toUrlCreate(urlCreateDto),
+        user,
+      ),
     );
   }
 
@@ -29,19 +41,35 @@ export class UrlController {
   }
 
   @Get('id/:id')
-  async findOne(@Param('id') id: number): Promise<UrlDto> {
-    return UrlDto.fromDomain(await this.urlService.findById(id));
+  @RequireLoggedIn()
+  @ApiBearerAuth()
+  async findOne(
+    @AuthUser() user: UserEntity,
+    @Param('id') id: number,
+  ): Promise<UrlDto> {
+    return UrlDto.fromDomain(await this.urlService.findById(id, user));
   }
 
   @Get(':code')
-  async resolveUrl(@Param('code') code: string, @Res() res: Response) {
-    const url = await this.urlService.findByShortCode(code);
+  @RequireLoggedIn()
+  @ApiBearerAuth()
+  async resolveUrl(
+    @AuthUser() user: UserEntity,
+    @Param('code') code: string,
+    @Res() res: Response,
+  ) {
+    const url = await this.urlService.findByShortCode(code, user);
 
     return res.redirect(301, url.originalUrl);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    await this.urlService.remove(id);
+  @RequireLoggedIn()
+  @ApiBearerAuth()
+  async remove(
+    @AuthUser() user: UserEntity,
+    @Param('id') id: number,
+  ): Promise<void> {
+    await this.urlService.remove(id, user);
   }
 }
