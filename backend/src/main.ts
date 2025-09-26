@@ -15,13 +15,18 @@ async function bootstrap() {
     .setDescription('API documentation for URL Shortener project')
     .setVersion('1.0')
     .addTag('api/v1')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
-
-  function documentFactory() {
-    return SwaggerModule.createDocument(app, config);
-  }
-
-  SwaggerModule.setup('api', app, documentFactory);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }
