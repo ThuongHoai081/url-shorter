@@ -26,7 +26,7 @@ export class UserController {
     return UserDto.fromDomain(await this.userService.findById(id));
   }
 
-  @Patch(':id')
+  @Patch('me')
   @RequireLoggedIn()
   @ApiBearerAuth()
   async update(

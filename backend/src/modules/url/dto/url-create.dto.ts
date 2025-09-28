@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 import { UrlCreate } from '../domain/url-create.domain';
 
 export class UrlCreateDto {
@@ -26,20 +20,10 @@ export class UrlCreateDto {
   @IsString({ message: 'shortCode must be a string' })
   readonly shortCode?: string;
 
-  @ApiProperty({
-    example: 1,
-    description: 'Optional ID of the user creating the URL',
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber()
-  readonly userId?: number;
-
   static toUrlCreate(dto: UrlCreateDto): UrlCreate {
     return {
       originalUrl: dto.originalUrl,
       shortCode: dto.shortCode ?? '',
-      userId: dto.userId ?? 0,
     };
   }
 }
