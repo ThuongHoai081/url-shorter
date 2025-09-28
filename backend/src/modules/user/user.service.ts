@@ -6,7 +6,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { UserCreate } from './domain/user-create.domain';
 import { User } from './domain/user.domain';
 import { UserUpdate } from './domain/user-update.domain';
 
@@ -16,18 +15,6 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
-
-  async create(userCreate: UserCreate): Promise<User> {
-    await this.verifyEmailIsNotExisting(userCreate.email);
-
-    const userEntity = this.userRepository.create(
-      UserCreate.toEntity(userCreate),
-    );
-
-    const saveUser = await this.userRepository.save(userEntity);
-
-    return User.fromEntity(saveUser);
-  }
 
   async findAll(): Promise<User[]> {
     const userEntities = await this.userRepository.find();
@@ -41,8 +28,8 @@ export class UserService {
     return User.fromEntity(userEntity);
   }
 
-  async update(id: number, userUpdate: UserUpdate): Promise<User> {
-    const userEntity = await this.findUserOrThrow(id);
+  async update(user: UserEntity, userUpdate: UserUpdate): Promise<User> {
+    const userEntity = await this.findUserOrThrow(user.id);
 
     return User.fromEntity(
       await this.userRepository.save({
@@ -52,8 +39,8 @@ export class UserService {
     );
   }
 
-  async remove(id: number): Promise<void> {
-    const userEntity = await this.findUserOrThrow(id);
+  async remove(user: UserEntity): Promise<void> {
+    const userEntity = await this.findUserOrThrow(user.id);
 
     await this.userRepository.remove(userEntity);
   }
