@@ -22,7 +22,7 @@ export class UrlController {
 
   @Post()
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async create(
     @AuthUser() user: UserEntity,
     @Body() urlCreateDto: UrlCreateDto,
@@ -42,7 +42,7 @@ export class UrlController {
 
   @Get('id/:id')
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async findOne(
     @AuthUser() user: UserEntity,
     @Param('id') id: number,
@@ -52,7 +52,7 @@ export class UrlController {
 
   @Get(':code')
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async resolveUrl(
     @AuthUser() user: UserEntity,
     @Param('code') code: string,
@@ -65,7 +65,7 @@ export class UrlController {
 
   @Delete(':id')
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async remove(
     @AuthUser() user: UserEntity,
     @Param('id') id: number,

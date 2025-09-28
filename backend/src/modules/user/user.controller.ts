@@ -28,7 +28,7 @@ export class UserController {
 
   @Patch('me')
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async update(
     @AuthUser() user: UserEntity,
     @Body() userUpdateDto: UserUpdateDto,
@@ -43,7 +43,7 @@ export class UserController {
 
   @Delete(':id')
   @RequireLoggedIn()
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   async remove(@AuthUser() user: UserEntity): Promise<void> {
     await this.userService.remove(user);
   }
